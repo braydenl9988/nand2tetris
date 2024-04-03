@@ -15,4 +15,9 @@ CHIP Mux4Way16 {
     
     PARTS:
     //// Replace this comment with your code.
+    Not(in=sel[0], out=notsel0);
+    
+    
+
+    
 }
