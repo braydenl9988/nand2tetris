@@ -42,4 +42,54 @@ CHIP ALU {
 
     PARTS:
     //// Replace this comment with your code.
+
+    ///zx operations
+    Mux16(a=x, b[0..15]=false, sel=zx, out=zeroX);
+    
+    ///nx operations
+    Not16(in=zeroX, out=notZeroX); ///creating negated 16 bit value
+    Mux16(a=zeroX, b=notZeroX, sel=nx, out=negateX); ///mux to decide which value moves forward based on nx
+
+    ///zy operations
+    Mux16(a=y, b[0..15]=false, sel=zy, out=zeroY);
+
+    ///ny operations
+    Not16(in=zeroY, out=notZeroY);
+    Mux16(a=zeroY, b=notZeroY, sel=ny, out=negateY);
+    
+    //f operations
+    Add16(a=negateX, b=negateY, out=sumXY);
+    And16(a=negateX, b=negateY, out=andXY);
+    Mux16(a=andXY, b=sumXY, sel=f, out=computeXY);
+
+    //no operations and negative flag
+    Not16(in=computeXY, out=notcomputeXY);
+    Mux16(a=computeXY, b=notcomputeXY, sel=no, out=out, out[15]=ng, out[0..7]=zrOut1, out[8..15]=zrOut2);
+
+    //zero flag
+    Or8Way(in=zrOut1, out=zr1);
+    Or8Way(in=zrOut2, out=zr2);
+    Or(a=zr1, b=zr2, out=preZr); 
+    Not(in=preZr, out=zr); //flip zero flag to be true
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
 }
