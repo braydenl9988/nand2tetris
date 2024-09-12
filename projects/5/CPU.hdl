@@ -32,5 +32,71 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-	//// Replace this comment with your code.
+	
+    //instruction MUX
+
+    Not(in=instruction[15], out=aInstruction); //flipping a instruction
+    
+    Mux16(a=outALU, b[15]=false, b[0..14]=instruction[0..14], sel=aInstruction, out=outInstruction); //a = ALU output
+
+    //A Register
+    Or(a=aInstruction, b=instruction[5], out=loadAReg); //Or gate to check if I need to load A Reg
+    ARegister(in=outInstruction, load=loadAReg, out=outAReg, out[0..14]=addressM); //second out pin leads to memory address output
+
+    //D Register
+    And(a=instruction[4], b=instruction[15], out=loadDReg);
+    DRegister(in=outALU, load=loadDReg, out=outDReg); //in = ALU output
+    
+    //ALU Mux
+    Mux16(a=outAReg, b=inM, sel=instruction[12], out=outALUMux);
+
+    //writeM pin
+    And(a=instruction[3], b=instruction[15], out=writeM); //checks for c instruction
+    
+    //ALU
+    ALU(x=outDReg, y=outALUMux, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outALU, out=outM, zr=zrFlag, ng=ngFlag);
+    
+    //PC control bit
+    Or(a=ngFlag, b=zrFlag, out=zrNeg); //checking if ALU output is either negative or zero
+    Not(in=zrNeg, out=pos); //not gate to flip, will turn out as 1 if positive
+    And(a=instruction[0], b=pos, out=jgt); //checking if j3 bit condition is fulfilled (>0)
+
+    And(a=instruction[1], b=zrFlag, out=jeq); //checking if j2 bit condition is fulfilled (=0)
+
+    And(a=instruction[2], b=ngFlag, out=jlt); //checking if j1 bit condition is fulfilled (<0)
+
+    Or(a=jgt, b=jlt, out=jNonZero);
+    Or(a=jNonZero, b=jeq, out=outPCTemp);
+
+    //PC
+    And(a=outPCTemp, b=instruction[15], out=outPCLoad); //check if it's an A instruction or C instruction
+    Not(in=outPCLoad, out=outPCInc); //not gate for inc bit on PC
+    PC(in=outAReg, load=outPCLoad, inc=outPCInc, reset=reset, out[0..14]=pc); 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

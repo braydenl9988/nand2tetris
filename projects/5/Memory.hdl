@@ -26,4 +26,26 @@ CHIP Memory {
 
     PARTS:
 	//// Replace this comment with your code.
+    DMux(in=load, sel=address[14], a=dMuxMemory, b=dMuxScreenKeeb); //Dmux for if it should go into RAM16K
+
+    DMux(in=dMuxScreenKeeb, sel=address[13], a=dMuxScreen, b=dMuxKeeb); //Dmux for screen/keyboard separation
+
+    RAM16K(in=in, load=dMuxMemory, address=address[0..13], out=outRAM); //load RAM16K
+
+    Screen(in=in, load=dMuxScreen, address=address[0..12], out=outScreen); //load screen
+
+    Keyboard(out=outKeyboard); //keyboard input
+
+    //MUX 4 way to figure out which output should be taken
+    Mux4Way16(a=outRAM, b=outRAM, c=outScreen, d=outKeyboard, sel=address[13..14], out=out);
+    
+    
+    
+    
+    
+    
+
+
+
+
 }

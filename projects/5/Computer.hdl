@@ -18,5 +18,12 @@ CHIP Computer {
     IN reset;
 
     PARTS:
-    //// Replace this comment with your code.
+    //// Refer to CPU+ HACK Computer abstraction slides for where pins go
+
+    CPU(inM=outMemory, instruction=outROM, reset=reset, outM=outM, writeM=outWriteM, addressM=outAddressM, pc=outPC); //CPU chip
+
+    Memory(in=outM, load=outWriteM, address=outAddressM, out=outMemory); //memory chip
+    
+    ROM32K(address=outPC, out=outROM); //built-in ROM chip, address is outpC as pc goes to instruction memory
+    
 }
