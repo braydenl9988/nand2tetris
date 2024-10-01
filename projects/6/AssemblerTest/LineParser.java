@@ -1,4 +1,4 @@
-package Assembler;
+package AssemblerTest;
 public class LineParser {
 
     private final static String AT_STRING = "@";

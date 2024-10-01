@@ -1,4 +1,4 @@
-package Assembler;
+package AssemblerTest;
 
 import java.util.Arrays;
 import java.lang.String;

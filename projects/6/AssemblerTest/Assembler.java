@@ -1,4 +1,4 @@
-package Assembler;
+package AssemblerTest;
 import java.lang.String;
 
 import java.io.BufferedReader;

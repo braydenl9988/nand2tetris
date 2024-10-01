@@ -1,4 +1,4 @@
-package Assembler;
+package AssemblerTest;
 import java.util.Hashtable;
 import java.lang.StringBuilder;
 import java.io.File;
